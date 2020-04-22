@@ -20,12 +20,12 @@ def create_logfile(filename, name='logger', with_stdout=False, level=logging.INF
     '''
     
     # get current time to rename strings
-    ctime = strftime('%Y%m%d.%H%M%S_', gmtime())
+    ctime = strftime('_%Y%m%d.%H%M%S', gmtime())
     
     # rotate log if it already exists
     if path.isfile(filename):
         print('Rotating existing logs...', flush=True)
-        rename(filename, ctime + filename)
+        rename(filename, filename + ctime)
     
     # get a logging session by name
     log = logging.getLogger(name + ctime)
