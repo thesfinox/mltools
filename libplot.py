@@ -1,3 +1,17 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# # Libplot
+# 
+# This is a collection of plot tools that can be used for data science and machine learning projects. We use `matplotlib` to plot figures.
+
+# ## Definition
+# 
+# We first define the class and its methods:
+
+# In[1]:
+
+
 import numpy             as np
 import matplotlib        as mpl
 import matplotlib.pyplot as plt
@@ -336,40 +350,22 @@ class Plot:
         # preparation
         ax.grid(alpha=0.2) #---------------------------------- create the grid
         ax.set_title(title) #--------------------------------- set the title
+        ax.set_xticks(range(np.shape(data)[1])) #------------- set ticks of the x axis
+        ax.set_yticks(range(np.shape(data)[0])) #------------- set ticks of the x axis
         if xticks is not None:
-            ax.set_xticks(np.arange(1,
-                                    np.shape(xticks)[0]+1,
-                                    step=1
-                                   )
-                         ) #---------------------------------- set ticks of the x axis
-            ax.set_xticklabels([''] + xticks,
-                               rotation=90
-                              ) #----------------------------- set the name of the ticks on the x axis
-        else:
-            ax.set_xticks(np.arange(1,
-                                    np.shape(data)[0]+1,
-                                    step=1
-                                   )
-                         ) #---------------------------------- set automatic ticks of the x axis
+            ax.set_xticklabels(xticks,
+                               ha='right',
+                               va='top',
+                               rotation=45) #----------------- set the name of the ticks on the x axis
         if yticks is not None:
-            ax.set_yticks(np.arange(1,
-                                    np.shape(yticks)[0]+1,
-                                    step=1)
-                         ) #---------------------------------- set ticks of the y axis
-            ax.set_yticklabels([''] + yticks) #--------------- set the name of the ticks on the y axis
-        else:
-            ax.set_yticks(np.arange(1,
-                                    np.shape(data)[1]+1,
-                                    step=1
-                                   )
-                         ) #---------------------------------- set automatic ticks of the y axis
+            ax.set_yticklabels(yticks) #---------------------- set the name of the ticks on the y axis
 
         # plot the matrix
-        matshow = ax.matshow(data,
-                             vmin=-1.0,
-                             vmax=1.0,
-                             **kwargs
-                            ) #------------------------------- show the matrix
+        matshow = ax.imshow(data,
+                            vmin=-1.0,
+                            vmax=1.0,
+                            **kwargs
+                           ) #-------------------------------- show the matrix
         cbar = ax.figure.colorbar(matshow,
                                   ax=ax,
                                   fraction=0.05,
@@ -439,3 +435,53 @@ class Plot:
             ax.legend(loc='best') #------------------- plot legend
 
         return self
+
+
+# ## Usage
+# 
+# We show some possible examples using the library:
+
+# In[2]:
+
+
+# single time series plot
+y1     = [1, 3, 3, -5, 8, 4, 5, 2, 0, -4]
+y2     = [-3, 2, 1, -3, 4, 3, 5, 1, -1, -2]
+labels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
+
+plot = Plot(rows=1, columns=2)
+plot.series2D(data=y1, axis=0, step=False, title='Time series', xlabel='epoch', ylabel='values', legend='series1')
+plot.series2D(data=y2, axis=0, step=True,  title='Time series', xlabel='epoch', ylabel='values', legend='series2')
+plot.series2D(data=y1, axis=1, step=False, title='Time series', xlabel='epoch', ylabel='values', legend='series1', labels=labels)
+plot.series2D(data=y2, axis=1, step=True,  title='Time series', xlabel='epoch', ylabel='values', legend='series2', labels=labels)
+plot.save_and_close('time_series')
+
+
+# In[3]:
+
+
+import pandas as pd
+
+# scatter and matrix plot
+c = [10, 132, 121, 243, 32, 43, 354, 223, 11, 254]
+M = pd.DataFrame(dict(label1=y1, label2=y2, label3=c, label4=y1, label5=y2, label6=y1, label7=y2, label8=c, label9=c, label10=y1)).corr()
+
+plot = Plot(rows=1, columns=2)
+plot.scatter2D(data=[y1, y2, c], axis=0)
+plot.matrix(data=M, axis=1, title='Correlation Matrix', xticks=M.columns, yticks=M.columns)
+plot.save_and_close('scatter_and_matrix')
+
+
+# In[4]:
+
+
+# single plot, inline interface
+Plot().series2D(data=y1, step=False, title='Time series', xlabel='epoch', ylabel='values', legend='series1').save_and_close('single_series')
+
+
+# In[5]:
+
+
+# single histogram
+Plot().hist2D(data=y1, title='Time series', xlabel='values', ylabel='frequency', legend='series1').save_and_close('single_histogram')
+
