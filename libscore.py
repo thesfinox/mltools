@@ -117,9 +117,7 @@ class ViewCV:
         Returns:
             a Pandas dataframe with the cross-validation results.
         '''
-        
         df = self.results()
-        
         return df.loc[df['params'] == self.best_parameters]
     
     def test_mean(self):
@@ -130,7 +128,7 @@ class ViewCV:
             the mean of the test score.
         '''
         
-        return self.best_results.loc[:, 'mean_test_score'].values[0]
+        return self.best_results().loc[:, 'mean_test_score'].values[0]
     
     def test_std(self):
         '''
@@ -140,7 +138,7 @@ class ViewCV:
             the mean of the test score.
         '''
         
-        return self.best_results.loc[:, 'std_test_score'].values[0]
+        return self.best_results().loc[:, 'std_test_score'].values[0]
     
 def accuracy(y_true, y_pred, rounding=None):
     '''
