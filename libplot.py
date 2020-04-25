@@ -381,6 +381,7 @@ class Plot:
             data:     the data to plot
 
         Optional arguments:
+            axis:     the id of the axis to use for the plot,
             title:    the title of the plot
             xlabel:   the label of the x axis
             ylabel:   the label of the y axis
@@ -417,6 +418,75 @@ class Plot:
                 histtype='step',
                 label=legend,
                 **kwargs) #--------------------------- plot histogram
+        if legend is not None:
+            ax.legend(loc='best') #------------------- plot legend
+
+        return self
+    
+    def fplot2D(self,
+                data,
+                function,
+                fmt,
+                axis=0,
+                title=None,
+                xlabel=None,
+                ylabel=None,
+                legend=None,
+                xlog=False,
+                ylog=False,
+                binstep=1,
+                **kwargs
+               ):
+        '''
+        Plot a 1D function given the data in ascissa.
+        
+        Required arguments:
+            data:     the independent variable,
+            function: the function to plot,
+            fmt:      the style of the line (see Matplotlib documentation).
+            
+        Optional arguments:
+            axis:     the id of the axis to use for the plot,
+            title:    the title of the plot
+            xlabel:   the label of the x axis
+            ylabel:   the label of the y axis
+            legend:   the label for the legend in the plot
+            xlog:     whether to use the log scale on the x axis
+            ylog:     whether to use the log scale on the y axis
+            binstep:  the distance between adjacent bins
+            **kwargs: additional arguments to pass to plt.plt
+        '''
+        
+        # choose the axis
+        if isinstance(self.axes, np.ndarray): #------- if multiple axes are present
+            ax = self.axes[axis]
+        else: #--------------------------------------- if only one axis
+            ax = self.axes
+
+        # preparation
+        ax.grid(alpha=0.2) #-------------------------- create the grid
+        ax.set_title(title) #------------------------- set the title
+        ax.set_xlabel(xlabel) #----------------------- set label for the x axis
+        ax.set_ylabel(ylabel) #----------------------- set label for the y axis
+        if xlog:
+            ax.set_xscale('log') #-------------------- use log scale on the x axis (if requested)
+        if ylog:
+            ax.set_yscale('log') #-------------------- use log scale on the y axis (if requested)
+        ax.set_xticks(np.arange(np.min(data),
+                                np.max(data)+1,
+                                step=binstep
+                               )
+                     ) #------------------------------ set ticks on the x axis
+        
+        # compute the data to plot
+        y = [function(x) for x in data] #------------- compute the values of the function
+        
+        # plot the histogram
+        ax.plot(data,
+                y,
+                fmt,
+                label=legend,
+                **kwargs) #--------------------------- plot function
         if legend is not None:
             ax.legend(loc='best') #------------------- plot legend
 
