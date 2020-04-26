@@ -312,6 +312,8 @@ class Plot:
                xticks=None,
                yticks=None,
                label=None,
+               vmin=-1.0,
+               vmax=1.0,
                **kwargs):
         '''
         Plot matrix entries.
@@ -324,6 +326,8 @@ class Plot:
             xticks:   the name of the entries in the columns of the matrix,
             yticks:   the name of the entries in the rows of the matrix,
             label:    the label to use for the colour bar axis,
+            vmin:     minimum value in the colour bar,
+            vmax:     maximum value in the colour bar,
             **kwargs: additional arguments to pass to plt.matshow
         '''
 
@@ -348,8 +352,8 @@ class Plot:
 
         # plot the matrix
         matshow = ax.imshow(data,
-                            vmin=-1.0,
-                            vmax=1.0,
+                            vmin=vmin,
+                            vmax=vmax,
                             **kwargs
                            ) #-------------------------------- show the matrix
         cbar = ax.figure.colorbar(matshow,
