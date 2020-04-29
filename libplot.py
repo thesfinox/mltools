@@ -18,7 +18,8 @@ class Plot:
             series2D:       plot a (time or labelled) series of data,
             scatter2D:      scatter plot of XY data,
             matrix:         plot entries of a matrix,
-            hist2D:         plot a 2D histogram.
+            hist2D:         plot a 2D histogram,
+            fplot2D:        plot a function f: R -> R.
     '''
     
     def __init__(self,
