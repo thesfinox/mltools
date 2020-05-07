@@ -2,6 +2,26 @@ import numpy             as np
 import matplotlib        as mpl
 import matplotlib.pyplot as plt
 
+def get_counts(df, label, feature):
+    '''
+    Generator to produce the count of unique occurrencies of the data.
+    
+    Required arguments:
+        df:      the Pandas dataframe
+        label:   the label to consider
+        feature: the feature to consider
+        
+    Yields:
+        np.array([ unique feature, unique value, counts ])
+    '''
+
+    for n in np.sort(df[feature].unique()):
+        uniques, counts = np.unique(df[label].loc[df[feature] == n].values,
+                                    return_counts=True)
+        
+        for u, c in np.c_[uniques, counts]:
+            yield np.array([ n, u, c ])
+            
 class Plot:
     '''
     This is a class to plot various kinds of data in their proper format using a unified interface.
