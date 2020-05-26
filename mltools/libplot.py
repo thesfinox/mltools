@@ -395,6 +395,7 @@ class Plot:
                xlabel=None,
                ylabel=None,
                legend=None,
+               labels=None,
                xlog=False,
                ylog=False,
                binstep=1,
@@ -411,6 +412,7 @@ class Plot:
             xlabel:   the label of the x axis
             ylabel:   the label of the y axis
             legend:   the label for the legend in the plot
+            labels:   the labels of the bins
             xlog:     whether to use the log scale on the x axis
             ylog:     whether to use the log scale on the y axis
             binstep:  the distance between adjacent bins
@@ -437,6 +439,11 @@ class Plot:
                                 step=binstep
                                )
                      ) #------------------------------ set ticks on the x axis
+        if labels is not None:
+            ax.set_xticklabels(labels,
+                               rotation=45,
+                               ha='right'
+                              ) #--------------- set labels on the x axis
         
         # plot the histogram
         ax.hist(data,
